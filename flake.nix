@@ -53,21 +53,7 @@
           };
           security.sudo.wheelNeedsPassword = false;
 
-          # Enable the OpenSSH daemon.
-          services.openssh = {
-            enable = true;
-            startWhenNeeded = true;
-            settings = {
-              PasswordAuthentication = true;
-              KbdInteractiveAuthentication = true;
-            };
-          };
-          networking.firewall = {
-            enable = true;
-            allowPing = true;
-            allowedTCPPorts = [22];
-          };
-
+          system.stateVersion = "26.05";
           nix.settings = {
             allowed-users = ["root" "code"];
             trusted-users = ["@wheel"];

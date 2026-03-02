@@ -1,0 +1,26 @@
+{
+    "name": "NixOS DinD",
+    "image": "nixos-devcontainer:latest",
+    "remoteUser": "code",
+    "overrideCommand": false,
+    "runArgs": [
+        "--privileged",
+        "--cap-add=SYS_ADMIN",
+        "--security-opt=seccomp=unconfined",
+        "-v",
+        "/sys/fs/cgroup:/sys/fs/cgroup:rw",
+        "-v",
+        "nixos-devcontainer-docker-data:/var/lib/docker"
+    ],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "jnoortheen.nix-ide",
+                "meta.pyrefly",
+                "ms-python.python",
+                "charliermarsh.ruff",
+                "Tailscale.vscode-tailscale"
+            ]
+        }
+    }
+}
