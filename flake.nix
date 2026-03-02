@@ -1,35 +1,38 @@
 {
-  description = "Nix package manager + Docker in Docker + Tailscale";
+  description = "Docker outside of Docker + Nix package manager + Tailscale";
 
-  inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-  };
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-  outputs = {
-    self,
-    nixpkgs,
-  }: let
-    system = "x86_64-linux";
-    pkgs = nixpkgs.legacyPackages.${system};
-  in {
-    devShells.${system}.default = pkgs.mkShell {
-      buildInputs = with pkgs; [
-        git
-        curl
-        nano
-        neovim
-        rsync
-        asciinema
-        fastfetch
-        httpie
-        jq
-        yq
+  outputs = {self, ...} @ inputs:
+    with inputs; let
+      # Nixpkgs instantiated for supported system types.
+      supportedSystems = [
+        "x86_64-linux"
+        "aarch64-linux"
       ];
-
-      shellHook = ''
-        echo "❄️ Welcome to your Nix-powered Devcontainer! ❄️"
-        fastfetch
-      '';
+      forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
+      nixpkgsFor = forAllSystems (system: import nixpkgs {inherit system;});
+    in {
+      devShells = forAllSystems (
+        system:
+          with nixpkgsFor.${system}; {
+            default = pkgs.mkShell {
+              packages = [
+                git
+                rsync
+                asciinema
+                fastfetch
+                httpie
+                jq
+                yq
+              ];
+              shellHook = ''
+                export REPO_ROOT=$(git rev-parse --show-toplevel)
+                echo "❄️ Welcome to your Nix-powered Devcontainer! ❄️"
+                fastfetch
+              '';
+            };
+          }
+      );
     };
-  };
 }
