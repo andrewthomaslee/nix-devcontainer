@@ -10,25 +10,97 @@
     nixosConfigurations.devcontainer = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
-        # IMPORTANT: This module adds the `config.system.build.tarball` attribute
+        # adds the `config.system.build.tarball` attribute
         "${nixpkgs}/nixos/modules/virtualisation/docker-image.nix"
 
         ({pkgs, ...}: {
           boot.isContainer = true;
 
-          nix.settings.experimental-features = ["nix-command" "flakes"];
-
           # Enable Docker-in-Docker
           virtualisation.docker.enable = true;
 
-          environment.systemPackages = with pkgs; [git nano curl docker];
+          environment.systemPackages = with pkgs; [
+            git
+            curl
+            nano
+            neovim
+            rsync
+            asciinema
+            fastfetch
+            httpie
+            jq
+            yq
+            tmux
+            tailscale
+            docker
+            # vscode
+            pyrefly
+            ruff
+            nil
+            kubectl
+            alejandra
+            kubernetes-helm
+          ];
 
-          users.users.vscode = {
-            isNormalUser = true;
-            extraGroups = ["wheel" "docker"];
-            password = "";
+          users.users = {
+            root.password = "";
+            code = {
+              isNormalUser = true;
+              extraGroups = ["wheel" "docker"];
+              password = "";
+            };
           };
           security.sudo.wheelNeedsPassword = false;
+
+          # Enable the OpenSSH daemon.
+          services.openssh = {
+            enable = true;
+            startWhenNeeded = true;
+            settings = {
+              PasswordAuthentication = true;
+              KbdInteractiveAuthentication = true;
+            };
+          };
+          networking.firewall = {
+            enable = true;
+            allowPing = true;
+            allowedTCPPorts = [22];
+          };
+
+          nix.settings = {
+            allowed-users = ["root" "code"];
+            trusted-users = ["@wheel"];
+            auto-allocate-uids = true;
+            system-features = ["uid-range"];
+            auto-optimise-store = true;
+            download-buffer-size = 524288000; # 500MB
+            experimental-features = [
+              "nix-command"
+              "flakes"
+              "auto-allocate-uids"
+              "cgroups"
+            ];
+            substituters = [
+              "https://cache.nixos.org"
+              "https://nix-community.cachix.org"
+              "https://cache.lounge.rocks/nix-cache"
+            ];
+            trusted-substituters = [
+              "https://cache.nixos.org"
+              "https://cache.lounge.rocks"
+              "https://cache.flox.dev"
+              "https://devenv.cachix.org"
+              "https://cache.clan.lol"
+              "https://nix-community.cachix.org"
+            ];
+            trusted-public-keys = [
+              "nix-cache:4FILs79Adxn/798F8qk2PC1U8HaTlaPqptwNJrXNA1g="
+              "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+              "flox-cache-public-1:7F4OyH7ZCnFhcze3fJdfyXYLQw/aV7GEed86nQ7IsOs="
+              "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw="
+              "cache.clan.lol-1:3KztgSAB5R1M+Dz7vzkBGzXdodizbgLXGXKXlcQLA28="
+            ];
+          };
         })
       ];
     };
