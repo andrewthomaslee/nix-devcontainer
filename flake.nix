@@ -1,5 +1,5 @@
 {
-  description = "My Dev Workspace";
+  description = "Nix package manager + Docker in Docker + Tailscale";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -24,15 +24,6 @@
         httpie
         jq
         yq
-        tmux
-        tailscale
-        kind
-        pyrefly
-        ruff
-        nil
-        kubectl
-        alejandra
-        kubernetes-helm
       ];
 
       shellHook = ''

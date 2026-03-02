@@ -1,5 +1,5 @@
 {
-    "name": "Nix + Docker in Docker",
+    "name": "Nix Devcontainer",
     "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
     "features": {
         "ghcr.io/devcontainers/features/nix:1": {
@@ -21,9 +21,6 @@
             "extensions": [
                 "mkhl.direnv",
                 "jnoortheen.nix-ide",
-                "meta.pyrefly",
-                "ms-python.python",
-                "charliermarsh.ruff",
                 "Tailscale.vscode-tailscale"
             ]
         }

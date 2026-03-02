@@ -1,42 +1,28 @@
-# NixOS as a Devcontainer
-### Pull the Image
+# VSCode Devcontainer
+
+## Requirements
+- Docker
+- VSCode
+
+## Setup
+1. Clone this repo
+2. Open the repo in VSCode
+3. Open the Command Palette (Ctrl+Shift+P)
+4. Select `Remote-Containers: Open Folder in Container...`
+5. Select the cloned repo
+6. Wait for the container to build
+7. Open a terminal in VSCode
+8. Run `direnv allow`
+9. Run `nix develop`
+
+
+# devcontainer CLI
+### Start the Container
 ```bash
-docker pull andrewthomaslee/nixos-devcontainer:latest
+devcontainer up --workspace-folder .
 ```
 
-### Run the Container
+### Execute a Command in the Container
 ```bash
-docker run -d \
-  --name nixos-devcontainer \
-  --privileged \
-  --cap-add=SYS_ADMIN \
-  --security-opt=seccomp=unconfined \
-  --tmpfs /run \
-  --tmpfs /run/lock \
-  --tmpfs /tmp \
-  -v /sys/fs/cgroup:/sys/fs/cgroup:rw \
-  -v nixos-devcontainer-store-data:/nix \
-  -v nixos-devcontainer-docker-data:/var/lib/docker \
-  andrewthomaslee/nixos-devcontainer:latest
-```
-
-### Connect to the Container
-```bash
-docker exec -it nixos-devcontainer su - code
-```
-
-
-
-# Building the Image
-### Build the Tarball
-```bash
-nix build .#nixosConfigurations.devcontainer.config.system.build.tarball
-```
-
-### Import the Tarball
-```bash
-docker import \
-  --change 'ENTRYPOINT ["/init"]' \
-  result/tarball/nixos-system-x86_64-linux.tar.xz \
-  andrewthomaslee/nixos-devcontainer:latest
+devcontainer exec --workspace-folder . nix develop
 ```
