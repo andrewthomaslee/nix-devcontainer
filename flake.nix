@@ -33,6 +33,7 @@
             tmux
             tailscale
             docker
+            kind
             # vscode
             pyrefly
             ruff
