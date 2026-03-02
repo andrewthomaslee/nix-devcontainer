@@ -1,22 +1,29 @@
 # VSCode Devcontainer
 
 ## Requirements
-- Docker
-- VSCode
+* [Docker](https://docs.docker.com/engine/install/)
 
-## Setup
+
+This devcontainer uses `Docker outside of Docker` which assumes you have Docker installed and running on your host machine with the Docker Daemon accessible at `/var/run/docker.sock`.
+
+
+
+* [VSCode devcontainers extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-containers)  ( recommended )
+
+
+or
+
+
+* [devcontainer](https://github.com/devcontainers/cli)  ( for CLI power users )
+
+## VSCode Usage
 1. Clone this repo
 2. Open the repo in VSCode
 3. Open the Command Palette (Ctrl+Shift+P)
-4. Select `Remote-Containers: Open Folder in Container...`
-5. Select the cloned repo
-6. Wait for the container to build
-7. Open a terminal in VSCode
-8. Run `direnv allow`
-9. Run `nix develop`
+4. Select `Reopen in Container`
 
 
-# devcontainer CLI
+## devcontainer CLI Usage
 ### Start the Container
 ```bash
 devcontainer up --workspace-folder .
@@ -24,5 +31,5 @@ devcontainer up --workspace-folder .
 
 ### Execute a Command in the Container
 ```bash
-devcontainer exec --workspace-folder . nix develop
+devcontainer exec --workspace-folder . bash
 ```
