@@ -6,13 +6,14 @@
             "version": "latest",
             "extraNixConfig": "experimental-features = nix-command flakes"
         },
-        "ghcr.io/devcontainers/features/docker-outside-of-docker:2": {
+        "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
             "version": "latest"
         },
         "ghcr.io/tailscale/codespace/tailscale": {
             "version": "latest"
         }
     },
+    "containerUser": "root",
     "remoteUser": "root",
     "mounts": [
         {
