@@ -1,6 +1,6 @@
 {
     "name": "NixOS DinD",
-    "image": "nixos-devcontainer:latest",
+    "image": "andrewthomaslee/nixos-devcontainer:latest",
     "remoteUser": "code",
     "overrideCommand": false,
     "runArgs": [
@@ -10,7 +10,9 @@
         "-v",
         "/sys/fs/cgroup:/sys/fs/cgroup:rw",
         "-v",
-        "nixos-devcontainer-docker-data:/var/lib/docker"
+        "nixos-devcontainer-docker-data:/var/lib/docker",
+        "-v",
+        "nixos-devcontainer-store-data:/nix"
     ],
     "customizations": {
         "vscode": {
